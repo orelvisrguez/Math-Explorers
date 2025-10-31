@@ -127,6 +127,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameType, onGoHome, onGameEnd, 
 
 
     const handleExit = useCallback(() => {
+        playSound('click.mp3');
         localStorage.removeItem(sessionKey);
         onGameEnd(gameType, score, score >= WIN_SCORE);
     }, [gameType, score, onGameEnd, sessionKey]);
@@ -175,6 +176,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameType, onGoHome, onGameEnd, 
     }, [gameType, difficulty, generateOptions, gameState]);
 
     const handleDifficultySelect = (level: Difficulty) => {
+        playSound('click.mp3');
         setDifficulty(level);
         setScore(0);
         setStreak(0);
@@ -203,6 +205,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameType, onGoHome, onGameEnd, 
     }, [timeLeft, feedback, difficulty, problem, newProblem, gameState]);
 
     const handleAnswerClick = (selected: number) => {
+        playSound('click.mp3');
         if (!problem || feedback || gameState !== 'playing') return;
         if (timerRef.current) clearTimeout(timerRef.current);
         
@@ -245,6 +248,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameType, onGoHome, onGameEnd, 
     };
     
     const handleResume = () => {
+        playSound('click.mp3');
         const savedSession = localStorage.getItem(sessionKey);
         if (savedSession) {
             const savedState: SavedGameState = JSON.parse(savedSession);
@@ -259,6 +263,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameType, onGoHome, onGameEnd, 
     };
 
     const handleStartNew = () => {
+        playSound('click.mp3');
         localStorage.removeItem(sessionKey);
         setPromptResume(false);
     };
