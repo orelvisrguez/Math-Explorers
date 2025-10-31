@@ -189,7 +189,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameType, onGoHome, onGameEnd, 
     useEffect(() => {
         if (difficulty && timeLeft > 0 && !feedback && gameState === 'playing') {
             timerRef.current = window.setTimeout(() => setTimeLeft(t => t - 1), 1000);
-        } else if (difficulty && timeLeft === 0 && !feedback) {
+        } else if (difficulty && problem && timeLeft === 0 && !feedback) {
             playSound('incorrect.mp3');
             setFeedback('incorrect');
             setMonsterState('dodged');
@@ -200,7 +200,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameType, onGoHome, onGameEnd, 
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
-    }, [timeLeft, feedback, difficulty, newProblem, gameState]);
+    }, [timeLeft, feedback, difficulty, problem, newProblem, gameState]);
 
     const handleAnswerClick = (selected: number) => {
         if (!problem || feedback || gameState !== 'playing') return;
@@ -222,7 +222,12 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameType, onGoHome, onGameEnd, 
             if (newScore >= WIN_SCORE) {
                 playSound('game-win.mp3');
                 setGameState('won');
-                setTimeout(() => handleExit(), 3000);
+                // We can't use handleExit here due to stale 'score' state in the closure.
+                // Call onGameEnd directly with the correct final score and win status.
+                setTimeout(() => {
+                    localStorage.removeItem(sessionKey);
+                    onGameEnd(gameType, newScore, true);
+                }, 3000);
             } else {
                  setTimeout(() => {
                     setMonsterState('defeated');

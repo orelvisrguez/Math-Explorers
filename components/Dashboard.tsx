@@ -47,7 +47,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onGameSelect, onLearningSel
     return (
         <>
             {showLevelUp && <LevelUpCelebration newLevel={user.level} onClose={handleCloseCelebration} />}
-            <div className="w-full max-w-6xl mx-auto bg-blue-800 bg-opacity-70 rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl backdrop-blur-sm border border-blue-500/50">
+            <div className="w-full max-w-7xl mx-auto bg-blue-800 bg-opacity-70 rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl backdrop-blur-sm border border-blue-500/50">
                 <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
                     <div>
                         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">Math Explorers:</h1>
@@ -56,35 +56,34 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onGameSelect, onLearningSel
                     <UserProfile user={user} />
                 </header>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-bold text-center mb-6">Elige tu Aventura</h2>
-                    <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 md:gap-8">
-                        {GAMES_DATA.map((game) => (
-                            <GameButton
-                                key={game.id}
-                                game={game}
-                                onClick={() => onGameSelect(game.id)}
-                            />
-                        ))}
-                    </div>
-                </section>
-
-                <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+                <main className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     
-                    {/* Columna Principal de Acciones */}
-                    <div className="lg:col-span-2 flex flex-col gap-6 md:gap-8">
-                        <DailyChallengeCard user={user} onGameSelect={onGameSelect} />
+                    {/* Main Content Column (Left on large screens) */}
+                    <div className="lg:col-span-2 flex flex-col gap-8">
+                        <section>
+                            <h2 className="text-2xl font-bold text-center mb-6">Elige tu Aventura</h2>
+                            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
+                                {GAMES_DATA.map((game) => (
+                                    <GameButton
+                                        key={game.id}
+                                        game={game}
+                                        onClick={() => onGameSelect(game.id)}
+                                    />
+                                ))}
+                            </div>
+                        </section>
                         <ModuleCard title="Exploración/Aprendizaje" icon={<RobotIcon />} onClick={onLearningSelect} />
                     </div>
-
-                    {/* Columna Lateral de Información */}
-                    <div className="flex flex-col gap-6 md:gap-8">
+                    
+                    {/* Sidebar Column (Right on large screens) */}
+                    <div className="lg:col-span-1 flex flex-col gap-8">
+                        <DailyChallengeCard user={user} onGameSelect={onGameSelect} />
                         <StatsCard user={user} />
                         <Achievements user={user} onShowAchievements={onShowAchievements} />
-                        <Leaderboard />
+                        <Leaderboard user={user} />
                     </div>
 
-                </section>
+                </main>
             </div>
         </>
     );

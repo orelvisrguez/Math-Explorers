@@ -116,7 +116,18 @@ export default function App() {
                  const rawLeaderboard = localStorage.getItem(leaderboardKey);
                  let leaderboard: ScoreEntry[] = rawLeaderboard ? JSON.parse(rawLeaderboard) : [];
                  
-                 leaderboard.push({ playerName: prevUser.name, score: finalScore });
+                 const playerIndex = leaderboard.findIndex(entry => entry.playerName === prevUser.name);
+
+                 if (playerIndex > -1) {
+                     // Player exists, update score only if it's higher
+                     if (finalScore > leaderboard[playerIndex].score) {
+                         leaderboard[playerIndex].score = finalScore;
+                     }
+                 } else {
+                     // New player, add to leaderboard
+                     leaderboard.push({ playerName: prevUser.name, score: finalScore });
+                 }
+
                  leaderboard.sort((a, b) => b.score - a.score);
                  
                  const updatedLeaderboard = leaderboard.slice(0, 20); // Keep top 20 scores

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ScoreEntry } from '../types';
+import { ScoreEntry, User } from '../types';
 
-const Leaderboard: React.FC = () => {
+interface LeaderboardProps {
+    user: User;
+}
+
+const Leaderboard: React.FC<LeaderboardProps> = ({ user }) => {
     const [scores, setScores] = useState<ScoreEntry[]>([]);
 
     useEffect(() => {
@@ -9,7 +13,7 @@ const Leaderboard: React.FC = () => {
         if (rawLeaderboard) {
             setScores(JSON.parse(rawLeaderboard));
         }
-    }, []);
+    }, [user]);
 
     const getMedal = (index: number) => {
         if (index === 0) return '🥇';
